@@ -1,0 +1,45 @@
+{
+    "miembros": [
+        {
+            "id_miembro": 1,
+            "nombre": "Jose Diego",
+            "apellido": "Zarza Morales",
+            "telefono": "6642452535",
+            "email": "l22210366@tectijuana.edu.mx",
+            "suscripcion": {
+                "tipo": "MENSUAL",
+                "fecha_inicio": "2026-01-29T18:40:09.517475",
+                "duracion_dias": 30,
+                "precio": 50.0,
+                "fecha_fin": "2026-02-28T18:40:09.517475",
+                "activa": true,
+                "dias_restantes": 29
+            },
+            "activo": true
+        }
+    ],
+    "inventario": [
+        {
+            "id_producto": 1,
+            "nombre": "Agua Ciel 1LT",
+            "categoria": "Bebida",
+            "cantidad": 99,
+            "precio": 18.0,
+            "codigo_barras": "BAR000001"
+        }
+    ],
+    "registros_acceso": [
+        {
+            "id_registro": 1,
+            "id_miembro": 1,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-01-29T18:40:22.134272"
+        },
+        {
+            "id_registro": 2,
+            "id_miembro": 1,
+            "tipo": "SALIDA",
+            "fecha_hora": "2026-01-29T18:42:58.890700"
+        }
+    ]
+}

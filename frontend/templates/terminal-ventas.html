@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal POS | Premium Gym</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .pos-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3), 
+                        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pos-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pos-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .pos-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .pos-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pos-body {
+            padding: 3rem;
+        }
+
+        .loading, .scanner-section, .success-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scanner-icon {
+            font-size: 5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .scanner-section h2 {
+            color: #1f2937;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .scanner-section p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .barcode-input {
+            width: 100%;
+            max-width: 450px;
+            padding: 1.25rem 1.75rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            margin: 0 auto 2rem;
+            display: block;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .barcode-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2), 
+                        0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .cart-container {
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+        }
+
+        .cart-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .cart-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .cart-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.35rem;
+            font-size: 1.05rem;
+        }
+
+        .cart-item-details {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            text-align: right;
+            font-weight: 800;
+            color: #10b981;
+            margin: 0 1.5rem;
+            font-size: 1.15rem;
+        }
+
+        .btn-remove {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-remove:hover {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .cart-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-top: 1.5rem;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .quick-add {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-quick {
+            padding: 1rem;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #4338ca;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-quick:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(67, 56, 202, 0.3);
+        }
+
+        .btn-quick:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-quick.add {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-quick.add:hover {
+            box-shadow: 0 10px 32px rgba(16, 185, 129, 0.5);
+        }
+
+        .admin-link {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .admin-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link a:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .spinner {
+            width: 64px;
+            height: 64px;
+            margin: 2rem auto;
+            border: 6px solid #e5e7eb;
+            border-top: 6px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-icon {
+            font-size: 6rem;
+            color: #10b981;
+            margin-bottom: 2rem;
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-total {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1.5rem 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="pos-container">
+        <div class="pos-header">
+            <h1><i class="fas fa-cash-register"></i> TERMINAL POS</h1>
+            <p>Sistema de Ventas Premium</p>
+        </div>
+
+        <div class="pos-body">
+            <!-- Pantalla de escáner -->
+            <div id="scanner-screen" class="scanner-section">
+                <div class="scanner-icon">
+                    <i class="fas fa-barcode"></i>
+                </div>
+                <h2>Escanea Productos</h2>
+                <p>Ingresa códigos de barras - Agrega múltiples productos al carrito</p>
+
+                <input type="text" 
+                       id="barcode-input" 
+                       class="barcode-input" 
+                       placeholder="BAR000001" 
+                       maxlength="20"
+                       autofocus>
+
+                <div id="cart-display" style="display: none;">
+                    <div class="cart-container" id="cart-items">
+                        <!-- Carrito dinámico -->
+                    </div>
+                    
+                    <div class="cart-total">
+                        <span>TOTAL:</span>
+                        <span id="cart-total-amount">$0.00</span>
+                    </div>
+
+                    <div class="quick-add">
+                        <button class="btn-quick" id="btn-limpiar-carrito">
+                            <i class="fas fa-trash"></i> Limpiar
+                        </button>
+                        <button class="btn-quick add" id="btn-finalizar-venta">
+                            <i class="fas fa-check-circle"></i> Cobrar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-link">
+                    <a href="/">
+                        <i class="fas fa-lock"></i>
+                        Panel de Administración
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pantalla de carga -->
+            <div id="loading-screen" class="loading">
+                <div class="spinner"></div>
+                <p style="color: #6b7280; font-size: 1.1rem; font-weight: 600;">Procesando venta...</p>
+            </div>
+
+            <!-- Pantalla de éxito -->
+            <div id="success-screen" class="success-screen">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 style="color: #1f2937; font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">¡Venta Exitosa!</h2>
+                
+                <div class="success-total" id="final-total">$0.00</div>
+
+                <div style="background: #f9fafb; padding: 2rem; border-radius: 20px; margin: 2rem 0; border: 1px solid #e5e7eb;">
+                    <div class="detail-row" style="border-bottom: 2px solid #e5e7eb; padding: 1rem 0;">
+                        <span style="color: #6b7280; font-weight: 600;">Productos vendidos:</span>
+                        <span style="color: #1f2937; font-weight: 700; font-size: 1.1rem;" id="sold-count">0 items</span>
+                    </div>
+                    <div id="sold-items-list">
+                        <!-- Lista de productos vendidos -->
+                    </div>
+                </div>
+
+                <button class="btn-quick add" id="btn-nueva-venta" style="width: 100%; font-size: 1.2rem; padding: 1.25rem;">
+                    <i class="fas fa-plus-circle"></i> Nueva Venta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        
+        const scannerScreen = document.getElementById('scanner-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        const successScreen = document.getElementById('success-screen');
+        const barcodeInput = document.getElementById('barcode-input');
+        const cartDisplay = document.getElementById('cart-display');
+        
+        let carrito = [];
+
+        // Auto-buscar al presionar Enter
+        barcodeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const value = this.value.trim();
+                if (value) {
+                    agregarAlCarrito(value);
+                    this.value = '';
+                }
+            }
+        });
+
+        // Botones
+        document.getElementById('btn-limpiar-carrito').addEventListener('click', limpiarCarrito);
+        document.getElementById('btn-finalizar-venta').addEventListener('click', finalizarVenta);
+        document.getElementById('btn-nueva-venta').addEventListener('click', nuevaVenta);
+
+        async function agregarAlCarrito(codigoBarras) {
+            try {
+                const response = await fetch(`${API_URL}/inventario/buscar/codigo/${codigoBarras}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const producto = result.data;
+                    
+                    // Verificar si ya está en el carrito
+                    const existente = carrito.find(item => item.id_producto === producto.id_producto);
+                    
+                    if (existente) {
+                        if (existente.cantidad < producto.cantidad) {
+                            existente.cantidad++;
+                        } else {
+                            mostrarNotificacion('Stock insuficiente', 'error');
+                            return;
+                        }
+                    } else {
+                        carrito.push({
+                            id_producto: producto.id_producto,
+                            nombre: producto.nombre,
+                            precio: producto.precio,
+                            cantidad: 1,
+                            stock_disponible: producto.cantidad
+                        });
+                    }
+                    
+                    actualizarCarrito();
+                    mostrarNotificacion(`${producto.nombre} agregado`, 'success');
+                } else {
+                    mostrarNotificacion('Producto no encontrado', 'error');
+                }
+            } catch (error) {
+                mostrarNotificacion('Error de conexión', 'error');
+            }
+        }
+
+        function actualizarCarrito() {
+            const cartItems = document.getElementById('cart-items');
+            
+            if (carrito.length === 0) {
+                cartDisplay.style.display = 'none';
+                return;
+            }
+            
+            cartDisplay.style.display = 'block';
+            
+            let total = 0;
+            cartItems.innerHTML = carrito.map((item, index) => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+                
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.nombre}</div>
+                            <div class="cart-item-details">${item.cantidad} x $${item.precio.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-price">$${subtotal.toFixed(2)}</div>
+                        <button class="btn-remove" onclick="removerDelCarrito(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('cart-total-amount').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function removerDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        function limpiarCarrito() {
+            if (confirm('¿Limpiar todo el carrito?')) {
+                carrito = [];
+                actualizarCarrito();
+            }
+        }
+
+        async function finalizarVenta() {
+            if (carrito.length === 0) {
+                mostrarNotificacion('El carrito está vacío', 'error');
+                return;
+            }
+            
+            mostrarPantalla('loading');
+
+            try {
+                const productos = carrito.map(item => ({
+                    id_producto: item.id_producto,
+                    cantidad: item.cantidad
+                }));
+
+                const response = await fetch(`${API_URL}/ventas/procesar`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ productos })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    mostrarExito(result.data);
+                } else {
+                    mostrarNotificacion(result.error, 'error');
+                    mostrarPantalla('scanner');
+                }
+            } catch (error) {
+                mostrarNotificacion('Error al procesar la venta', 'error');
+                mostrarPantalla('scanner');
+            }
+        }
+
+        function mostrarExito(venta) {
+            document.getElementById('final-total').textContent = `$${venta.total.toFixed(2)}`;
+            document.getElementById('sold-count').textContent = `${venta.productos.length} items`;
+            
+            const itemsList = document.getElementById('sold-items-list');
+            itemsList.innerHTML = venta.productos.map(item => `
+                <div class="detail-row" style="padding: 0.75rem 0;">
+                    <span style="color: #6b7280; font-weight: 500;">${item.nombre} x${item.cantidad}:</span>
+                    <span style="color: #1f2937; font-weight: 700; font-size: 1.05rem;">$${item.subtotal.toFixed(2)}</span>
+                </div>
+            `).join('');
+            
+            mostrarPantalla('success');
+            
+            // Auto-volver después de 4 segundos
+            setTimeout(nuevaVenta, 4000);
+        }
+
+        function nuevaVenta() {
+            carrito = [];
+            barcodeInput.value = '';
+            actualizarCarrito();
+            mostrarPantalla('scanner');
+            barcodeInput.focus();
+        }
+
+        function mostrarPantalla(pantalla) {
+            scannerScreen.style.display = 'none';
+            loadingScreen.style.display = 'none';
+            successScreen.style.display = 'none';
+
+            if (pantalla === 'scanner') {
+                scannerScreen.style.display = 'block';
+            } else if (pantalla === 'loading') {
+                loadingScreen.style.display = 'block';
+            } else if (pantalla === 'success') {
+                successScreen.style.display = 'block';
+            }
+        }
+
+        function mostrarNotificacion(mensaje, tipo) {
+            const notif = document.createElement('div');
+            notif.className = `notification ${tipo}`;
+            notif.innerHTML = `
+                <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${mensaje}
+            `;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.remove();
+            }, 2500);
+        }
+
+        // Mostrar pantalla inicial
+        mostrarPantalla('scanner');
+    </script>
+</body>
+</html>

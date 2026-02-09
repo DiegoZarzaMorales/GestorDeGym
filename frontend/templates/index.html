@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Gimnasio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-dumbbell"></i>
+            <h2>GymPro</h2>
+            <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.25rem;">Panel de Administración</p>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="miembros">
+                <i class="fas fa-users"></i>
+                <span>Miembros</span>
+            </a>
+            <a href="#" class="nav-item" data-section="inventario">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+            <a href="#" class="nav-item" data-section="acceso">
+                <i class="fas fa-door-open"></i>
+                <span>Acceso</span>
+            </a>
+        </nav>
+        <div style="padding: 1.5rem; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="/terminal" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255,255,255,0.8); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s; margin-bottom: 0.5rem;" 
+               onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.color='white';"
+               onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.8)';">
+                <i class="fas fa-fingerprint" style="font-size: 1.2rem;"></i>
+                <span>Terminal de Acceso</span>
+            </a>
+            <a href="/ventas" style="display: flex; align-items: center; gap: 0.75rem; color: rgba(255,255,255,0.8); text-decoration: none; padding: 0.75rem; border-radius: 8px; transition: all 0.3s;" 
+               onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.color='white';"
+               onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.8)';">
+                <i class="fas fa-cash-register" style="font-size: 1.2rem;"></i>
+                <span>Terminal de Ventas</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <h1 id="page-title">Dashboard</h1>
+            <div class="header-actions">
+                <button class="btn-icon" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-total-miembros">0</h3>
+                        <p>Total Miembros</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-miembros-activos">0</h3>
+                        <p>Miembros Activos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-ventas-hoy">0</h3>
+                        <p>Ventas Hoy</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-ganancias-hoy">$0</h3>
+                        <p>Ganancias Hoy</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-row">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Estadísticas de Ventas (Últimos 30 días)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.25rem;">Total Ventas</div>
+                                <div style="color: #1f2937; font-size: 1.5rem; font-weight: 700;" id="total-ventas-mes">0</div>
+                            </div>
+                            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.25rem;">Ganancias Totales</div>
+                                <div style="color: #10b981; font-size: 1.5rem; font-weight: 700;" id="ganancias-mes">$0</div>
+                            </div>
+                            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.25rem;">Promedio/Venta</div>
+                                <div style="color: #1f2937; font-size: 1.5rem; font-weight: 700;" id="promedio-venta">$0</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin-bottom: 1rem; color: #1f2937;">Top 5 Productos Vendidos</h4>
+                        <div id="top-productos">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-row">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Últimos Accesos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="ultimos-accesos" class="access-list">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Miembros Section -->
+        <section id="miembros" class="section">
+            <div class="section-header">
+                <button class="btn btn-primary" id="btn-nuevo-miembro">
+                    <i class="fas fa-user-plus"></i> Nuevo Miembro
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="data-table" id="tabla-miembros">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Suscripción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventario Section -->
+        <section id="inventario" class="section">
+            <div class="section-header">
+                <button class="btn btn-primary" id="btn-nuevo-producto">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="data-table" id="tabla-inventario">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Código Barras</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Acceso Section -->
+        <section id="acceso" class="section">
+            <div class="access-controls">
+                <div class="card access-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-sign-in-alt"></i> Registrar Entrada</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="number" id="entrada-id" class="form-input" placeholder="ID del Miembro">
+                        <button class="btn btn-success btn-block" id="btn-registrar-entrada">
+                            <i class="fas fa-check"></i> Registrar Entrada
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card access-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-sign-out-alt"></i> Registrar Salida</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="number" id="salida-id" class="form-input" placeholder="ID del Miembro">
+                        <button class="btn btn-danger btn-block" id="btn-registrar-salida">
+                            <i class="fas fa-times"></i> Registrar Salida
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Historial de Accesos</h3>
+                </div>
+                <div class="card-body">
+                    <div id="historial-accesos" class="access-history">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal: Nuevo Miembro -->
+    <div id="modal-nuevo-miembro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nuevo Miembro</h2>
+                <span class="close" data-modal="modal-nuevo-miembro">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="form-nuevo-miembro">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" name="apellido" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" name="telefono" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="modal-nuevo-miembro">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Asignar Suscripción -->
+    <div id="modal-suscripcion" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Asignar Suscripción</h2>
+                <span class="close" data-modal="modal-suscripcion">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="form-suscripcion">
+                    <input type="hidden" id="suscripcion-miembro-id">
+                    <div class="form-group">
+                        <label>Tipo de Suscripción</label>
+                        <select name="tipo" class="form-input" required>
+                            <option value="MENSUAL">Mensual - $50.00 (30 días)</option>
+                            <option value="TRIMESTRAL">Trimestral - $135.00 (90 días)</option>
+                            <option value="SEMESTRAL">Semestral - $250.00 (180 días)</option>
+                            <option value="ANUAL">Anual - $450.00 (365 días)</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="modal-suscripcion">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Asignar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Nuevo Producto -->
+    <div id="modal-nuevo-producto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nuevo Producto</h2>
+                <span class="close" data-modal="modal-nuevo-producto">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="form-nuevo-producto">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" name="nombre" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <input type="text" name="categoria" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad Inicial</label>
+                        <input type="number" name="cantidad" class="form-input" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="number" name="precio" class="form-input" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Código de Barras (opcional)</label>
+                        <input type="text" name="codigo_barras" class="form-input" placeholder="Se generará automáticamente si se deja vacío">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="modal-nuevo-producto">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Modificar Stock -->
+    <div id="modal-stock" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Modificar Stock</h2>
+                <span class="close" data-modal="modal-stock">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="form-stock">
+                    <input type="hidden" id="stock-producto-id">
+                    <div class="form-group">
+                        <label>Operación</label>
+                        <select name="tipo" class="form-input" required>
+                            <option value="AGREGAR">Agregar Stock</option>
+                            <option value="QUITAR">Quitar Stock</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" name="cantidad" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="modal-stock">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notification" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
