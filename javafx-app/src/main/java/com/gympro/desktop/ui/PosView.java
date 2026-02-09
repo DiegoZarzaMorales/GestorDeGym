@@ -176,7 +176,7 @@ public class PosView extends BorderPane {
         try {
             Sale sale = store.processSale(items);
             cart.clear();
-            setStatus("Venta OK · Total $" + String.format("%.2f", sale.total), false);
+            setStatus("Venta OK · Total $" + "%.2f".formatted(sale.total), false);
             refreshCart();
         } catch (Exception ex) {
             setStatus("Error: " + ex.getMessage(), true);
@@ -185,7 +185,7 @@ public class PosView extends BorderPane {
 
     private void refreshCart() {
         cartTable.setItems(FXCollections.observableArrayList(cart));
-        totalLabel.setText(String.format("$%.2f", cart.stream().mapToDouble(CartRow::subtotal).sum()));
+        totalLabel.setText("$%.2f".formatted(cart.stream().mapToDouble(CartRow::subtotal).sum()));
     }
 
     private void setStatus(String msg, boolean error) {
@@ -209,10 +209,10 @@ public class PosView extends BorderPane {
             this.productName = new javafx.beans.property.SimpleStringProperty(product.nombre);
             this.barcode = new javafx.beans.property.SimpleStringProperty(product.codigo_barras);
             this.qty = new javafx.beans.property.SimpleIntegerProperty(qty);
-            this.unitPrice = new javafx.beans.property.SimpleStringProperty(String.format("$%.2f", product.precio));
-            this.subtotal = new javafx.beans.property.SimpleStringProperty(String.format("$%.2f", subtotal()));
+            this.unitPrice = new javafx.beans.property.SimpleStringProperty("$%.2f".formatted(product.precio));
+            this.subtotal = new javafx.beans.property.SimpleStringProperty("$%.2f".formatted(subtotal()));
 
-            this.qty.addListener((obs, o, n) -> this.subtotal.set(String.format("$%.2f", subtotal())));
+            this.qty.addListener((obs, o, n) -> this.subtotal.set("$%.2f".formatted(subtotal())));
         }
 
         double subtotal() {

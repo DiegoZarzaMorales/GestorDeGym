@@ -12,6 +12,6 @@ public class Product {
 
     public String codigoBarrasAuto() {
         if (codigo_barras != null && !codigo_barras.isBlank()) return codigo_barras;
-        return String.format("BAR%06d", id_producto);
+        return "BAR%06d".formatted(id_producto);
     }
 }

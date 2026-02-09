@@ -128,7 +128,7 @@ public class AdminView extends VBox {
         cStock.setCellValueFactory(d -> new javafx.beans.property.SimpleIntegerProperty(d.getValue().cantidad));
 
         TableColumn<Product, String> cPrecio = new TableColumn<>("Precio");
-        cPrecio.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(String.format("$%.2f", d.getValue().precio)));
+        cPrecio.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty("$%.2f".formatted(d.getValue().precio)));
 
         productsTable.getColumns().setAll(cId, cNom, cCat, cCod, cStock, cPrecio);
 
@@ -261,7 +261,7 @@ public class AdminView extends VBox {
         kpiMiembros.setText(String.valueOf(store.db().miembros.size()));
         long activos = store.db().miembros.stream().filter(m -> m.suscripcion != null && m.suscripcion.estaActiva(LocalDate.now())).count();
         kpiActivos.setText(String.valueOf(activos));
-        kpiGanancias.setText(String.format("$%.2f", store.gananciasHoy()));
+        kpiGanancias.setText("$%.2f".formatted(store.gananciasHoy()));
     }
 
     private void alert(String msg) {

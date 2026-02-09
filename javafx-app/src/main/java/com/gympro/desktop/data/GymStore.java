@@ -97,7 +97,7 @@ public class GymStore {
         p.categoria = categoria;
         p.cantidad = cantidad;
         p.precio = precio;
-        p.codigo_barras = (codigoBarras == null || codigoBarras.isBlank()) ? String.format("BAR%06d", nextId) : codigoBarras.trim();
+        p.codigo_barras = (codigoBarras == null || codigoBarras.isBlank()) ? "BAR%06d".formatted(nextId) : codigoBarras.trim();
         db.inventario.add(p);
         save();
         return p;
