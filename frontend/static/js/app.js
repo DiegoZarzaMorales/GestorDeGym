@@ -1,5 +1,5 @@
 // API Base URL
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 // Estado de la aplicación
 let currentSection = 'dashboard';

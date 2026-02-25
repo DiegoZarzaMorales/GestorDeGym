@@ -127,21 +127,60 @@ Entidades principales:
 - Python 3.10 o superior recomendado
 - `pip`
 
-### Instalar dependencias
+### 1) (Opcional) Crear entorno virtual
+
+Windows (PowerShell):
 
 ```bash
-pip install -r requirements.txt
+py -m venv .venv
+.venv\Scripts\Activate.ps1
 ```
 
-### Ejecutar el proyecto
+macOS/Linux:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 2) Instalar dependencias
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 3) Ejecutar el proyecto
 
 ```bash
 python run.py
 ```
 
-### Acceso local
+También puedes usar en Windows:
+
+```bash
+py run.py
+```
+
+### 4) Acceso
 
 - Aplicación: `http://localhost:5000`
+
+### Configuración opcional de arranque
+
+Puedes cambiar host, puerto y modo debug con variables de entorno:
+
+- `HOST` (por defecto: `0.0.0.0`)
+- `PORT` (por defecto: `5000`)
+- `DEBUG` (por defecto: `true`)
+
+Ejemplo en PowerShell:
+
+```bash
+$env:HOST="127.0.0.1"
+$env:PORT="8000"
+$env:DEBUG="false"
+py run.py
+```
 
 ## Dependencias
 
