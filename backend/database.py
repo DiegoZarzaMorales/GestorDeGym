@@ -71,15 +71,24 @@ class Database:
     
     def buscar_por_telefono(self, telefono: str):
         """Buscar miembro por número de teléfono"""
+        telefono_normalizado = (telefono or '').strip()
         for miembro in self.miembros:
-            if miembro.telefono == telefono:
+            if (miembro.telefono or '').strip() == telefono_normalizado:
                 return miembro
         return None
+
+    def _contar_miembros_activos(self):
+        """Contar miembros con suscripción vigente"""
+        return sum(
+            1
+            for miembro in self.miembros
+            if miembro.suscripcion and miembro.suscripcion.esta_activa()
+        )
     
-    def agregar_miembro(self, nombre: str, apellido: str, telefono: str, email: str):
+    def agregar_miembro(self, nombre: str, apellido: str, telefono: str, email: str, rol: str = 'MIEMBRO'):
         """Agregar un nuevo miembro"""
         id_miembro = max([m.id_miembro for m in self.miembros], default=0) + 1
-        miembro = Miembro(id_miembro, nombre, apellido, telefono, email)
+        miembro = Miembro(id_miembro, nombre, apellido, telefono, email, rol)
         self.miembros.append(miembro)
         self.guardar_datos()
         return miembro
@@ -158,8 +167,11 @@ class Database:
         miembro = self.obtener_miembro(id_miembro)
         if not miembro:
             raise ValueError("Miembro no encontrado")
-        
-        if not miembro.suscripcion or not miembro.suscripcion.esta_activa():
+
+        rol_miembro = (miembro.rol or 'MIEMBRO').upper()
+        es_entrenador = rol_miembro in ['ENTRENADOR', 'COACH', 'TRAINER', 'INSTRUCTOR']
+
+        if not es_entrenador and (not miembro.suscripcion or not miembro.suscripcion.esta_activa()):
             raise ValueError("El miembro no tiene suscripción activa")
         
         id_registro = max([r.id_registro for r in self.registros_acceso], default=0) + 1
@@ -196,7 +208,8 @@ class Database:
         entradas = sum(1 for r in registros_hoy if r.tipo == 'ENTRADA')
         salidas = sum(1 for r in registros_hoy if r.tipo == 'SALIDA')
         
-        # Contar miembros activos
+        miembros_activos = self._contar_miembros_activos()
+
         # Calcular ganancias del día
         ventas_hoy = [v for v in self.ventas if v.fecha_hora.date() == hoy]
         ganancias_hoy = sum(v.total for v in ventas_hoy)

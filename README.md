@@ -1,187 +1,176 @@
-# 🏋️ Sistema de Gestión para Gimnasio - GymPro
+# StronkSystem - Sistema de Gestión de Gimnasio
 
-Sistema web profesional con arquitectura Frontend/Backend para la gestión integral de gimnasios.
+Sistema web para administración de gimnasio con arquitectura separada en backend (Flask API REST) y frontend (HTML, CSS, JavaScript).
 
-## 📋 Características
+## Descripción General
 
-### Backend (API REST)
-- ✅ API RESTful con Flask
-- ✅ Gestión de miembros y suscripciones
-- ✅ Control de inventario
-- ✅ Registro de entradas/salidas
-- ✅ Persistencia de datos en JSON
-- ✅ Estadísticas en tiempo real
+La aplicación cubre:
 
-### Frontend (Web Visual)
-- ✅ Interfaz moderna y responsiva
-- ✅ Dashboard con estadísticas en tiempo real
-- ✅ Gestión visual de miembros
-- ✅ Control de inventario con alertas de stock
-- ✅ Sistema de acceso con validación de suscripciones
-- ✅ Notificaciones y modales interactivos
+- Gestión de miembros con rol (por ejemplo: MIEMBRO, ENTRENADOR)
+- Asignación y validación de suscripciones
+- Control de inventario
+- Registro de entradas y salidas
+- Punto de venta (POS) con ventas y métricas
+- Portal cliente con publicaciones y recomendaciones
+- Persistencia local de datos en JSON
 
-## 🗂️ Estructura del Proyecto
+## Funcionalidades Implementadas
 
-```
+### Backend
+
+- API REST con Flask y CORS
+- Reglas de negocio para:
+   - Acceso permitido con suscripción activa (excepto roles de entrenador)
+   - Stock y validaciones de inventario
+   - Procesamiento de ventas
+   - Estadísticas diarias y estadísticas de ventas
+- Persistencia automática en `data/gimnasio_datos.json`
+
+### Frontend
+
+- Panel administrativo principal (`/`)
+- Terminal de acceso (`/terminal`)
+- Terminal de ventas POS (`/ventas`)
+- Portal cliente (`/cliente`)
+- Interfaces responsivas con tablas, modales, badges y notificaciones
+
+## Estructura del Proyecto
+
+```text
 GestionDeProyectos/
-│
-├── backend/                    # Backend (API)
+├── backend/
 │   ├── __init__.py
-│   ├── app.py                 # Aplicación Flask
-│   ├── models.py              # Modelos de datos
-│   ├── database.py            # Gestión de base de datos
-│   └── routes.py              # Rutas de la API
-│
-├── frontend/                   # Frontend (Interfaz Web)
+│   ├── app.py
+│   ├── database.py
+│   ├── models.py
+│   └── routes.py
+├── data/
+│   └── gimnasio_datos.json
+├── frontend/
 │   ├── static/
 │   │   ├── css/
-│   │   │   └── styles.css     # Estilos CSS
-│   │   └── js/
-│   │       └── app.js         # JavaScript de la aplicación
+│   │   │   ├── styles.css
+│   │   │   └── cliente.css
+│   │   ├── js/
+│   │   │   ├── app.js
+│   │   │   └── cliente.js
+│   │   └── img/
+│   │       ├── backgrounds/
+│   │       ├── posts/
+│   │       └── stronksystem-gym-logo.svg
 │   └── templates/
-│       └── index.html         # Página principal
-│
-├── data/                       # Datos persistentes
-│   └── gimnasio_datos.json
-│
-├── run.py                      # Archivo principal de ejecución
-├── requirements.txt            # Dependencias Python
+│       ├── index.html
+│       ├── terminal.html
+│       ├── terminal-ventas.html
+│       └── cliente.html
+├── .gitignore
+├── requirements.txt
+├── run.py
 └── README.md
 ```
 
-## 🚀 Instalación y Ejecución
+## Rutas Web
 
-### 1. Instalar dependencias
+- `GET /` Panel administrativo
+- `GET /terminal` Terminal de acceso
+- `GET /ventas` Terminal de ventas
+- `GET /cliente` Portal cliente
+
+## API REST
+
+### Miembros
+
+- `GET /api/miembros`
+- `GET /api/miembros/<id_miembro>`
+- `GET /api/miembros/buscar/telefono/<telefono>`
+- `POST /api/miembros`
+- `POST /api/miembros/<id_miembro>/suscripcion`
+- `GET /api/suscripciones/tipos`
+
+### Inventario y Ventas
+
+- `GET /api/inventario`
+- `POST /api/inventario`
+- `GET /api/inventario/buscar/codigo/<codigo_barras>`
+- `PUT /api/inventario/<id_producto>/stock`
+- `POST /api/ventas/procesar`
+- `GET /api/ventas`
+- `GET /api/estadisticas/ventas`
+
+### Acceso y Estadísticas
+
+- `POST /api/acceso/entrada`
+- `POST /api/acceso/salida`
+- `GET /api/acceso/registros`
+- `GET /api/estadisticas/hoy`
+
+## Modelo de Datos
+
+Entidades principales:
+
+- `Miembro`
+   - Campos: id, nombre, apellido, telefono, email, rol, suscripcion, activo
+- `Suscripcion`
+   - Tipos: `MENSUAL`, `TRIMESTRAL`, `SEMESTRAL`, `ANUAL`
+   - Incluye duración, precio, fecha de inicio/fin, estado activo y días restantes
+- `ProductoInventario`
+   - Incluye código de barras (autogenerable si no se envía)
+- `RegistroAcceso`
+   - Tipos: `ENTRADA` y `SALIDA`
+- `Venta`
+   - Incluye lista de productos vendidos, subtotales, total y fecha
+
+## Instalación y Ejecución
+
+### Requisitos
+
+- Python 3.10 o superior recomendado
+- `pip`
+
+### Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Ejecutar la aplicación
+### Ejecutar el proyecto
 
 ```bash
 python run.py
 ```
 
-### 3. Acceder a la aplicación
+### Acceso local
 
-Abre tu navegador en: **http://localhost:5000**
+- Aplicación: `http://localhost:5000`
 
-## 🎯 Uso de la Aplicación
+## Dependencias
 
-### Dashboard
-- Visualiza estadísticas en tiempo real
-- Total de miembros y miembros activos
-- Entradas del día y personas en el gimnasio
-- Últimos accesos registrados
+Archivo `requirements.txt`:
 
-### Gestión de Miembros
-1. Click en "Nuevo Miembro" para agregar miembros
-2. Ingresa datos: nombre, apellido, teléfono, email
-3. Asigna suscripciones con el botón "Suscripción"
-4. 4 tipos disponibles: Mensual, Trimestral, Semestral, Anual
+- `Flask==3.0.0`
+- `Flask-CORS==4.0.0`
+- `Werkzeug==3.0.1`
 
-### Gestión de Inventario
-1. Click en "Nuevo Producto" para agregar productos
-2. Gestiona stock con el botón "Stock"
-3. Alertas de stock bajo (rojo < 10, amarillo < 20)
+## Persistencia
 
-### Control de Acceso
+Los datos se guardan en `data/gimnasio_datos.json` con esta estructura base:
 
-**Terminal de Acceso** (http://localhost:5000/terminal):
-- Interfaz simplificada para usuarios
-- Ingreso por número de teléfono (simula huella dactilar)
-- Registro rápido de entradas y salidas
-- Visualización inmediata de estado de suscripción
-- Auto-retorno a pantalla de inicio
+- `miembros`
+- `inventario`
+- `ventas`
+- `registros_acceso`
 
-**Panel de Administración**:
-1. **Registrar Entrada/Salida**: Ingresa ID o teléfono del miembro
-   - El sistema valida que la suscripción esté activa
-   - Muestra días restantes de suscripción
-2. Visualiza el historial completo de accesos
-3. Estadísticas en tiempo real
+La carga y guardado es automática mediante `backend/database.py`.
 
-## 📊 API Endpoints
+## Notas Técnicas
 
-### Miembros
-- `GET /api/miembros` - Obtener todos los miembros
-- `POST /api/miembros` - Agregar nuevo miembro
-- `GET /api/miembros/<id>` - Obtener miembro específico
-- `POST /api/miembros/<id>/suscripcion` - Asignar suscripción
+- La lógica del negocio está en `backend/database.py`.
+- Las entidades y serialización están en `backend/models.py`.
+- Los endpoints están en `backend/routes.py`.
+- La configuración de Flask y rutas de plantillas está en `backend/app.py`.
 
-### Inventario
-- `GET /api/inventario` - Obtener todos los productos
-- `POST /api/inventario` - Agregar nuevo producto
-- `PUT /api/inventario/<id>/stock` - Modificar stock
+## Estado Actual
 
-### Acceso
-- `POST /api/acceso/entrada` - Registrar entrada
-- `POST /api/acceso/salida` - Registrar salida
-- `GET /api/acceso/registros` - Obtener historial de accesos
-
-### Estadísticas
-- `GET /api/estadisticas/hoy` - Estadísticas del día
-
-## 🎨 Características de la Interfaz
-
-- **Diseño moderno** con gradientes y animaciones
-- **Sidebar de navegación** intuitiva
-- **Dashboard con tarjetas** de estadísticas
-- **Tablas interactivas** con datos en tiempo real
-- **Modales** para formularios
-- **Notificaciones** visuales de acciones
-- **Badges de estado** con códigos de color
-- **Responsive design** para diferentes pantallas
-
-## 🔐 Tipos de Suscripciones
-
-| Tipo | Duración | Precio |
-|------|----------|--------|
-| Mensual | 30 días | $50.00 |
-| Trimestral | 90 días | $135.00 |
-| Semestral | 180 días | $250.00 |
-| Anual | 365 días | $450.00 |
-
-## 💾 Persistencia de Datos
-
-- Los datos se guardan automáticamente en `data/gimnasio_datos.json`
-- Carga automática al iniciar la aplicación
-- Incluye: miembros, inventario y registros de acceso
-
-## 🛠️ Tecnologías Utilizadas
-
-### Backend
-- **Flask** - Framework web
-- **Python 3.x** - Lenguaje de programación
-- **JSON** - Almacenamiento de datos
-
-### Frontend
-- **HTML5** - Estructura
-- **CSS3** - Estilos y animaciones
-- **JavaScript (Vanilla)** - Interactividad
-- **Font Awesome** - Iconos
-
-## 🎯 Características Destacadas
-
-✅ Arquitectura profesional Frontend/Backend separada  
-✅ API REST completa y documentada  
-✅ Interfaz visual moderna y responsiva  
-✅ Validación de suscripciones en tiempo real  
-✅ Sistema de notificaciones visuales  
-✅ Dashboard con estadísticas actualizadas  
-✅ Gestión completa de inventario con alertas  
-✅ Control de acceso con historial detallado  
-✅ Código organizado y bien estructurado  
-✅ Fácil de extender y mantener  
-
-## 📝 Notas de Desarrollo
-
-- **Separación de responsabilidades**: Backend maneja la lógica de negocio, Frontend la presentación
-- **API RESTful**: Permite futuras integraciones con apps móviles
-- **Modular**: Fácil agregar nuevas funcionalidades
-- **Escalable**: Preparado para migrar a base de datos SQL si es necesario
-
----
-
-**Desarrollado con 💪 para la gestión profesional de gimnasios**
+- Proyecto limpio de código legado no usado.
+- Backend y documentación alineados con la estructura real.
+- Checklist de mantenimiento completado y validado sin errores.

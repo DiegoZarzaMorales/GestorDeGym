@@ -1,0 +1,14 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">StronkSystem Minimal Gym Logo</title>
+  <desc id="logoDesc">Logo minimalista de gimnasio con mancuerna en blanco y amarillo sobre fondo oscuro.</desc>
+
+  <rect x="4" y="4" width="120" height="120" rx="24" fill="#0F1218"/>
+  <rect x="4" y="4" width="120" height="120" rx="24" stroke="#2B313D" stroke-width="2"/>
+
+  <rect x="26" y="48" width="8" height="32" rx="2" fill="#F5C400"/>
+  <rect x="38" y="43" width="7" height="42" rx="2" fill="#F5C400"/>
+  <rect x="83" y="43" width="7" height="42" rx="2" fill="#F5C400"/>
+  <rect x="94" y="48" width="8" height="32" rx="2" fill="#F5C400"/>
+
+  <rect x="45" y="60" width="38" height="8" rx="4" fill="#F2F4F7"/>
+</svg>

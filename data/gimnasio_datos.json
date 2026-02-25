@@ -6,15 +6,46 @@
             "apellido": "Zarza Morales",
             "telefono": "6642452535",
             "email": "l22210366@tectijuana.edu.mx",
+            "rol": "MIEMBRO",
             "suscripcion": {
-                "tipo": "MENSUAL",
-                "fecha_inicio": "2026-01-29T18:40:09.517475",
-                "duracion_dias": 30,
-                "precio": 50.0,
-                "fecha_fin": "2026-02-28T18:40:09.517475",
+                "tipo": "ANUAL",
+                "fecha_inicio": "2026-02-24T20:50:14.791245",
+                "duracion_dias": 365,
+                "precio": 450.0,
+                "fecha_fin": "2027-02-24T20:50:14.791245",
                 "activa": true,
-                "dias_restantes": 29
+                "dias_restantes": 364
             },
+            "activo": true
+        },
+        {
+            "id_miembro": 2,
+            "nombre": "Kevin",
+            "apellido": "Olvera",
+            "telefono": "66423465",
+            "email": "kevinOlvera@gmail.com",
+            "rol": "ENTRENADOR",
+            "suscripcion": null,
+            "activo": true
+        },
+        {
+            "id_miembro": 3,
+            "nombre": "Karla",
+            "apellido": "Vega",
+            "telefono": "665468843",
+            "email": "KarlaVega@gmail.com",
+            "rol": "ENTRENADOR",
+            "suscripcion": null,
+            "activo": true
+        },
+        {
+            "id_miembro": 4,
+            "nombre": "Francisco",
+            "apellido": "Fernandez",
+            "telefono": "663786345634",
+            "email": "Farfan@gmail.com",
+            "rol": "ENTRENADOR",
+            "suscripcion": null,
             "activo": true
         }
     ],
@@ -23,9 +54,25 @@
             "id_producto": 1,
             "nombre": "Agua Ciel 1LT",
             "categoria": "Bebida",
-            "cantidad": 99,
+            "cantidad": 97,
             "precio": 18.0,
             "codigo_barras": "BAR000001"
+        }
+    ],
+    "ventas": [
+        {
+            "id_venta": 1,
+            "productos": [
+                {
+                    "id_producto": 1,
+                    "nombre": "Agua Ciel 1LT",
+                    "cantidad": 2,
+                    "precio_unitario": 18.0,
+                    "subtotal": 36.0
+                }
+            ],
+            "total": 36.0,
+            "fecha_hora": "2026-02-24T20:45:29.040383"
         }
     ],
     "registros_acceso": [
@@ -40,6 +87,36 @@
             "id_miembro": 1,
             "tipo": "SALIDA",
             "fecha_hora": "2026-01-29T18:42:58.890700"
+        },
+        {
+            "id_registro": 3,
+            "id_miembro": 1,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-02-24T20:59:38.233757"
+        },
+        {
+            "id_registro": 4,
+            "id_miembro": 1,
+            "tipo": "SALIDA",
+            "fecha_hora": "2026-02-24T20:59:55.117439"
+        },
+        {
+            "id_registro": 5,
+            "id_miembro": 2,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-02-24T21:49:07.523950"
+        },
+        {
+            "id_registro": 6,
+            "id_miembro": 3,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-02-24T21:49:10.733514"
+        },
+        {
+            "id_registro": 7,
+            "id_miembro": 4,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-02-24T21:49:13.186667"
         }
     ]
 }

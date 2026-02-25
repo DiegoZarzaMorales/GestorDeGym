@@ -3,18 +3,19 @@ Modelos de datos para el sistema de gimnasio
 """
 
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import Optional
 
 
 class Miembro:
     """Clase para representar un miembro del gimnasio"""
     
-    def __init__(self, id_miembro: int, nombre: str, apellido: str, telefono: str, email: str):
+    def __init__(self, id_miembro: int, nombre: str, apellido: str, telefono: str, email: str, rol: str = 'MIEMBRO'):
         self.id_miembro = id_miembro
         self.nombre = nombre
         self.apellido = apellido
         self.telefono = telefono
         self.email = email
+        self.rol = rol.upper() if isinstance(rol, str) and rol else 'MIEMBRO'
         self.suscripcion: Optional['Suscripcion'] = None
         self.activo = True
     
@@ -25,6 +26,7 @@ class Miembro:
             'apellido': self.apellido,
             'telefono': self.telefono,
             'email': self.email,
+            'rol': self.rol,
             'suscripcion': self.suscripcion.to_dict() if self.suscripcion else None,
             'activo': self.activo
         }
@@ -36,7 +38,8 @@ class Miembro:
             data['nombre'],
             data['apellido'],
             data['telefono'],
-            data['email']
+            data['email'],
+            data.get('rol', 'MIEMBRO')
         )
         if data.get('suscripcion'):
             miembro.suscripcion = Suscripcion.from_dict(data['suscripcion'])

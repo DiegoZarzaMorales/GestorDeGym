@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal POS | Premium Gym</title>
+    <title>StronkSystem | Terminal de Ventas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,9 +13,26 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-1: #0b0d12;
+            --bg-2: #111827;
+            --surface: #ffffff;
+            --surface-soft: #f9fafb;
+            --line: #eaecf0;
+            --text: #0f172a;
+            --text-muted: #667085;
+            --brand: #f5c400;
+            --brand-2: #d4a900;
+            --accent: #f5c400;
+            --ok: #13795b;
+            --danger: #111827;
+            --shadow-lg: 0 22px 48px rgba(16, 24, 40, 0.28);
+            --shadow-md: 0 10px 20px rgba(16, 24, 40, 0.1);
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-1);
             min-height: 100vh;
             padding: 20px;
             position: relative;
@@ -23,35 +40,25 @@
         }
 
         body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-            z-index: 0;
+            content: none;
         }
 
         .pos-container {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3), 
-                        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            background: var(--surface);
+            border-radius: 18px;
+            box-shadow: var(--shadow-lg);
             max-width: 950px;
             width: 100%;
             margin: 0 auto;
             overflow: hidden;
             position: relative;
             z-index: 1;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--line);
         }
 
         .pos-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2.5rem;
+            background: #111827;
+            padding: 2rem 2.2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -64,112 +71,128 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            background: rgba(255,255,255,0.04);
+            transform: none;
         }
 
         .pos-header h1 {
             color: white;
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
             position: relative;
             z-index: 1;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            margin-right: 0.55rem;
+            vertical-align: middle;
+            padding: 3px;
+            overflow: hidden;
+        }
+
+        .logo-pill img {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .pos-header p {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #fde68a;
             position: relative;
             z-index: 1;
         }
 
+        .pos-header h1 {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+        }
+
         .pos-body {
-            padding: 3rem;
+            padding: 2rem 2.2rem;
         }
 
         .loading, .scanner-section, .success-screen {
             display: none;
             text-align: center;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.24s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .scanner-icon {
-            font-size: 5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            font-size: 3.4rem;
+            color: #f5c400;
+            margin-bottom: 1rem;
         }
 
         .scanner-section h2 {
-            color: #1f2937;
-            font-size: 2rem;
+            color: var(--text);
+            font-size: 1.65rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.4rem;
             letter-spacing: -0.02em;
         }
 
         .scanner-section p {
-            color: #6b7280;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 1.4rem;
+            font-size: 0.97rem;
         }
 
         .barcode-input {
             width: 100%;
             max-width: 450px;
-            padding: 1.25rem 1.75rem;
-            font-size: 1.3rem;
+            padding: 0.95rem 1.15rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            border: 2px solid #e5e7eb;
-            border-radius: 16px;
-            margin: 0 auto 2rem;
+            border: 1px solid #d6deea;
+            border-radius: 13px;
+            margin: 0 auto 1.25rem;
             display: block;
             text-align: center;
             font-family: 'Courier New', monospace;
             letter-spacing: 0.05em;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
         }
 
         .barcode-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2), 
-                        0 0 0 4px rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
         .cart-container {
-            background: #f9fafb;
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+            background: var(--surface-soft);
+            border-radius: 16px;
+            padding: 1rem;
+            margin: 1rem 0;
             max-height: 350px;
             overflow-y: auto;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--line);
+        }
+
+        .cart-display {
+            display: none;
         }
 
         .cart-container::-webkit-scrollbar {
@@ -177,31 +200,31 @@
         }
 
         .cart-container::-webkit-scrollbar-track {
-            background: #e5e7eb;
+            background: #dbe3ef;
             border-radius: 10px;
         }
 
         .cart-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #98a2b3;
             border-radius: 10px;
         }
 
         .cart-item {
             background: white;
-            border-radius: 14px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 0.75rem;
+            border-radius: 12px;
+            padding: 0.8rem 0.95rem;
+            margin-bottom: 0.55rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
+            border: 1px solid #e5edf7;
         }
 
         .cart-item:hover {
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
-            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
         }
 
         .cart-item-info {
@@ -210,59 +233,59 @@
 
         .cart-item-name {
             font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 0.35rem;
-            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+            font-size: 0.98rem;
         }
 
         .cart-item-details {
-            font-size: 0.9rem;
-            color: #6b7280;
+            font-size: 0.82rem;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
         .cart-item-price {
             text-align: right;
             font-weight: 800;
-            color: #10b981;
-            margin: 0 1.5rem;
-            font-size: 1.15rem;
+            color: var(--ok);
+            margin: 0 1rem;
+            font-size: 1rem;
         }
 
         .btn-remove {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
+            background: #fef3c7;
+            color: #111827;
             border: none;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+            font-size: 0.92rem;
+            box-shadow: 0 6px 12px rgba(245, 196, 0, 0.24);
         }
 
         .btn-remove:hover {
-            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+            background: #fde68a;
+            transform: scale(1.06);
+            box-shadow: 0 10px 18px rgba(245, 196, 0, 0.28);
         }
 
         .cart-total {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 16px;
+            background: #f5c400;
+            color: #111827;
+            padding: 1rem 1.1rem;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.4rem;
+            font-size: 1.22rem;
             font-weight: 800;
-            margin-top: 1.5rem;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            margin-top: 0.9rem;
+            box-shadow: none;
         }
 
         .cart-empty {
@@ -275,21 +298,21 @@
         .quick-add {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 0.75rem;
+            margin-top: 0.95rem;
         }
 
         .btn-quick {
-            padding: 1rem;
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            color: #4338ca;
+            padding: 0.8rem;
+            background: #eaecf0;
+            color: #344054;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.92rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+            transition: all 0.2s ease;
+            box-shadow: none;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -297,8 +320,8 @@
         }
 
         .btn-quick:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(67, 56, 202, 0.3);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-quick:active {
@@ -306,18 +329,17 @@
         }
 
         .btn-quick.add {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 1.1rem;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            background: #f5c400;
+            color: #111827;
+            box-shadow: none;
         }
 
         .btn-quick.add:hover {
-            box-shadow: 0 10px 32px rgba(16, 185, 129, 0.5);
+            box-shadow: var(--shadow-sm);
         }
 
         .admin-link {
-            margin-top: 3rem;
+            margin-top: 1.35rem;
             text-align: center;
         }
 
@@ -325,25 +347,26 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: #6b7280;
+            color: #334155;
             text-decoration: none;
             font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            padding: 0.55rem 0.95rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
         }
 
         .admin-link a:hover {
-            color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+            color: var(--brand);
+            background: #fff1f0;
         }
 
         .spinner {
-            width: 64px;
-            height: 64px;
+            width: 52px;
+            height: 52px;
             margin: 2rem auto;
-            border: 6px solid #e5e7eb;
-            border-top: 6px solid #667eea;
+            border: 5px solid #e5e7eb;
+            border-top: 5px solid #f5c400;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -354,37 +377,85 @@
         }
 
         .success-icon {
-            font-size: 6rem;
-            color: #10b981;
-            margin-bottom: 2rem;
-            animation: successPop 0.5s ease;
-        }
-
-        @keyframes successPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            font-size: 4.2rem;
+            color: var(--ok);
+            margin-bottom: 1rem;
         }
 
         .success-total {
-            font-size: 3.5rem;
+            font-size: 2.65rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 1.5rem 0;
+            color: #13795b;
+            margin: 0.8rem 0;
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--line);
         }
 
         .detail-row:last-child {
             border-bottom: none;
+        }
+
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .success-title {
+            color: var(--text);
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .success-summary {
+            background: var(--surface-soft);
+            padding: 1.2rem;
+            border-radius: 14px;
+            margin: 1rem 0;
+            border: 1px solid var(--line);
+        }
+
+        .summary-head {
+            border-bottom: 2px solid var(--line);
+            padding: 0.7rem 0;
+        }
+
+        .summary-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .summary-value {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .new-sale-btn {
+            width: 100%;
+            font-size: 1.02rem;
+            padding: 0.95rem;
+        }
+
+        .sold-line {
+            padding: 0.62rem 0;
+        }
+
+        .sold-name {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .sold-price {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 0.98rem;
         }
 
         .notification {
@@ -392,11 +463,11 @@
             top: 20px;
             right: 20px;
             padding: 1rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 11px;
+            box-shadow: 0 16px 28px rgba(2, 6, 23, 0.25);
             z-index: 9999;
             animation: slideIn 0.3s ease;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -408,21 +479,49 @@
         }
 
         .notification.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #13795b;
             color: white;
         }
 
         .notification.error {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
+            background: #f5c400;
+            color: #111827;
+        }
+
+        .brand-watermark {
+            position: fixed;
+            right: 16px;
+            bottom: 12px;
+            color: #f5c400;
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.55;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .pos-body {
+                padding: 1.5rem 1rem;
+            }
+
+            .pos-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .quick-add {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="pos-container">
         <div class="pos-header">
-            <h1><i class="fas fa-cash-register"></i> TERMINAL POS</h1>
-            <p>Sistema de Ventas Premium</p>
+            <h1><span class="logo-pill"><img src="{{ url_for('static', filename='img/stronksystem-gym-logo.svg') }}" alt="Logo StronkSystem"></span>StronkSystem Store</h1>
+            <p>Smart POS 24/7</p>
         </div>
 
         <div class="pos-body">
@@ -441,7 +540,7 @@
                        maxlength="20"
                        autofocus>
 
-                <div id="cart-display" style="display: none;">
+                <div id="cart-display" class="cart-display">
                     <div class="cart-container" id="cart-items">
                         <!-- Carrito dinámico -->
                     </div>
@@ -464,7 +563,7 @@
                 <div class="admin-link">
                     <a href="/">
                         <i class="fas fa-lock"></i>
-                        Panel de Administración
+                        Volver al Backoffice
                     </a>
                 </div>
             </div>
@@ -472,7 +571,7 @@
             <!-- Pantalla de carga -->
             <div id="loading-screen" class="loading">
                 <div class="spinner"></div>
-                <p style="color: #6b7280; font-size: 1.1rem; font-weight: 600;">Procesando venta...</p>
+                <p class="loading-text">Procesando venta...</p>
             </div>
 
             <!-- Pantalla de éxito -->
@@ -480,26 +579,28 @@
                 <div class="success-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h2 style="color: #1f2937; font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">¡Venta Exitosa!</h2>
+                <h2 class="success-title">¡Venta Exitosa!</h2>
                 
                 <div class="success-total" id="final-total">$0.00</div>
 
-                <div style="background: #f9fafb; padding: 2rem; border-radius: 20px; margin: 2rem 0; border: 1px solid #e5e7eb;">
-                    <div class="detail-row" style="border-bottom: 2px solid #e5e7eb; padding: 1rem 0;">
-                        <span style="color: #6b7280; font-weight: 600;">Productos vendidos:</span>
-                        <span style="color: #1f2937; font-weight: 700; font-size: 1.1rem;" id="sold-count">0 items</span>
+                <div class="success-summary">
+                    <div class="detail-row summary-head">
+                        <span class="summary-label">Productos vendidos:</span>
+                        <span class="summary-value" id="sold-count">0 items</span>
                     </div>
                     <div id="sold-items-list">
                         <!-- Lista de productos vendidos -->
                     </div>
                 </div>
 
-                <button class="btn-quick add" id="btn-nueva-venta" style="width: 100%; font-size: 1.2rem; padding: 1.25rem;">
+                <button class="btn-quick add new-sale-btn" id="btn-nueva-venta">
                     <i class="fas fa-plus-circle"></i> Nueva Venta
                 </button>
             </div>
         </div>
     </div>
+
+    <div class="brand-watermark" aria-hidden="true">GestionCorp</div>
 
     <script>
         const API_URL = 'http://localhost:5000/api';
@@ -527,6 +628,29 @@
         document.getElementById('btn-limpiar-carrito').addEventListener('click', limpiarCarrito);
         document.getElementById('btn-finalizar-venta').addEventListener('click', finalizarVenta);
         document.getElementById('btn-nueva-venta').addEventListener('click', nuevaVenta);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F2') {
+                e.preventDefault();
+                finalizarVenta();
+            }
+
+            if (e.key === 'F4') {
+                e.preventDefault();
+                limpiarCarrito();
+            }
+
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                nuevaVenta();
+            }
+
+            if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+                e.preventDefault();
+                barcodeInput.focus();
+                barcodeInput.select();
+            }
+        });
 
         async function agregarAlCarrito(codigoBarras) {
             try {
@@ -650,9 +774,9 @@
             
             const itemsList = document.getElementById('sold-items-list');
             itemsList.innerHTML = venta.productos.map(item => `
-                <div class="detail-row" style="padding: 0.75rem 0;">
-                    <span style="color: #6b7280; font-weight: 500;">${item.nombre} x${item.cantidad}:</span>
-                    <span style="color: #1f2937; font-weight: 700; font-size: 1.05rem;">$${item.subtotal.toFixed(2)}</span>
+                <div class="detail-row sold-line">
+                    <span class="sold-name">${item.nombre} x${item.cantidad}:</span>
+                    <span class="sold-price">$${item.subtotal.toFixed(2)}</span>
                 </div>
             `).join('');
             

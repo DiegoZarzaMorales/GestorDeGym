@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StronkSystem | Portal Cliente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente.css') }}">
+</head>
+<body>
+    <header class="client-header">
+        <div class="brand-wrap">
+            <div class="brand-logo" aria-hidden="true">
+                <img src="{{ url_for('static', filename='img/stronksystem-gym-logo.svg') }}" alt="">
+            </div>
+            <div>
+                <h1>StronkSystem</h1>
+                <p>Portal del Cliente</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" id="btn-refresh-client">
+                <i class="fas fa-rotate"></i> Actualizar
+            </button>
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-shield-halved"></i> Backoffice
+            </a>
+        </div>
+    </header>
+
+    <main class="client-main">
+        <section class="hero card">
+            <div>
+                <h2>Tu centro de entrenamiento</h2>
+                <p>Consulta novedades del gym, recomendaciones diarias, entrenadores disponibles y publicaciones recientes.</p>
+            </div>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Hoy</span>
+                    <span class="meta-value" id="today-date">--</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Hora</span>
+                    <span class="meta-value" id="client-clock">--:--</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="card top-posts">
+            <div class="card-head">
+                <h3><i class="fab fa-facebook"></i> Publicaciones del Gym</h3>
+                <div class="posts-actions">
+                    <button class="btn btn-ghost btn-slider" id="posts-prev" type="button" aria-label="Anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-ghost btn-slider" id="posts-next" type="button" aria-label="Siguiente">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <a href="https://www.facebook.com/24sietelasalondras" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-arrow-up-right-from-square"></i> Ver Facebook
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="posts-track" class="posts-track"></div>
+                <div id="posts-dots" class="posts-dots"></div>
+            </div>
+        </section>
+
+        <section class="grid two-cols">
+            <article class="card">
+                <div class="card-head">
+                    <h3><i class="fas fa-bullhorn"></i> Noticias del Gym</h3>
+                </div>
+                <div class="card-body" id="news-list"></div>
+            </article>
+
+            <article class="card">
+                <div class="card-head">
+                    <h3><i class="fas fa-lightbulb"></i> Recomendaciones</h3>
+                    <select id="goal-selector" class="field-select">
+                        <option value="general">General</option>
+                        <option value="perdida_grasa">Pérdida de grasa</option>
+                        <option value="ganancia_muscular">Ganancia muscular</option>
+                        <option value="resistencia">Resistencia</option>
+                    </select>
+                </div>
+                <div class="card-body" id="tips-list"></div>
+            </article>
+        </section>
+
+        <section class="grid two-cols">
+            <article class="card">
+                <div class="card-head">
+                    <h3><i class="fas fa-user-tie"></i> Entrenadores Disponibles</h3>
+                </div>
+                <div class="card-body" id="trainers-list"></div>
+            </article>
+
+            <article class="card">
+                <div class="card-head">
+                    <h3><i class="fas fa-calendar-check"></i> Actividad de Hoy</h3>
+                </div>
+                <div class="card-body" id="activity-list"></div>
+            </article>
+        </section>
+    </main>
+
+    <div id="client-toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/cliente.js') }}"></script>
+</body>
+</html>

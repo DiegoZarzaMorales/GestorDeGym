@@ -57,7 +57,8 @@ def agregar_miembro():
             data['nombre'],
             data['apellido'],
             data['telefono'],
-            data['email']
+            data['email'],
+            data.get('rol', 'MIEMBRO')
         )
         return jsonify({'success': True, 'data': miembro.to_dict()}), 201
     except Exception as e:

@@ -1,0 +1,8 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reto 21 días">
+  <rect width="1200" height="675" fill="#111827"/>
+  <rect x="60" y="60" width="1080" height="555" rx="24" fill="#1f2937" stroke="#374151"/>
+  <text x="100" y="250" fill="#f5c400" font-size="72" font-family="Inter, Arial" font-weight="800">Reto 21 Días</text>
+  <text x="100" y="330" fill="#f8fafc" font-size="40" font-family="Inter, Arial" font-weight="600">Constancia • Disciplina • Resultados</text>
+  <circle cx="980" cy="220" r="95" fill="#f5c400"/>
+  <rect x="930" y="205" width="100" height="30" rx="15" fill="#f8fafc"/>
+</svg>

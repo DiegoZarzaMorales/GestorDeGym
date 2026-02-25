@@ -37,5 +37,10 @@ def create_app():
     @app.route('/ventas')
     def ventas():
         return render_template('terminal-ventas.html')
+
+    # Ruta de Portal Cliente - Para socios del gym
+    @app.route('/cliente')
+    def cliente():
+        return render_template('cliente.html')
     
     return app
