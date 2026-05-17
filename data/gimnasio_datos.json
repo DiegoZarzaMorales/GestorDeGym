@@ -14,7 +14,7 @@
                 "precio": 450.0,
                 "fecha_fin": "2027-02-24T20:50:14.791245",
                 "activa": true,
-                "dias_restantes": 364
+                "dias_restantes": 351
             },
             "activo": true
         },
@@ -117,6 +117,18 @@
             "id_miembro": 4,
             "tipo": "ENTRADA",
             "fecha_hora": "2026-02-24T21:49:13.186667"
+        },
+        {
+            "id_registro": 8,
+            "id_miembro": 1,
+            "tipo": "ENTRADA",
+            "fecha_hora": "2026-03-10T17:24:56.454063"
+        },
+        {
+            "id_registro": 9,
+            "id_miembro": 1,
+            "tipo": "SALIDA",
+            "fecha_hora": "2026-03-10T17:25:19.650076"
         }
     ]
 }
